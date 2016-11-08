@@ -22,7 +22,7 @@
 #include <Guid/Fdt.h>
 #include <Guid/FdtHob.h>
 
-STATIC CONST EFI_PHYSICAL_ADDRESS SdhciBaseAddress = 0x3f202000;
+//STATIC CONST EFI_PHYSICAL_ADDRESS SdhciBaseAddress = 0x3f202000;
 
 /**
   @param  ImageHandle   of the loaded driver
@@ -40,31 +40,5 @@ RaspberryPiPlatformDxeInitialize (
   IN EFI_SYSTEM_TABLE   *SystemTable
   )
 {
-  VOID              *Hob;
-  VOID              *DeviceTreeBase;
-  EFI_STATUS        Status;
-
-  Hob = GetFirstGuidHob (&gFdtHobGuid);
-  if (Hob == NULL || GET_GUID_HOB_DATA_SIZE (Hob) != sizeof (UINT64)) {
-    return EFI_NOT_FOUND;
-  }
-  DeviceTreeBase = (VOID *)(UINTN)*(UINT64 *)GET_GUID_HOB_DATA (Hob);
-
-  if (fdt_check_header (DeviceTreeBase) != 0) {
-    DEBUG ((EFI_D_ERROR, "%a: No DTB found @ 0x%p\n", __FUNCTION__,
-      DeviceTreeBase));
-    return EFI_NOT_FOUND;
-  }
-
-  DEBUG ((EFI_D_INFO, "%a: DTB @ 0x%p\n", __FUNCTION__, DeviceTreeBase));
-
-  Status = gBS->InstallConfigurationTable (&gFdtTableGuid, DeviceTreeBase);
-  ASSERT_EFI_ERROR (Status);
-
-  return RegisterNonDiscoverableDevice (
-           SdhciBaseAddress,
-           NonDiscoverableDeviceTypeSdhci,
-           NonDiscoverableDeviceDmaTypeNonCoherent,
-           NULL,
-           NULL);
+  return EFI_SUCCESS;
 }
