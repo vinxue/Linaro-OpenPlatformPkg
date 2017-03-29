@@ -292,10 +292,7 @@
   #
   # Platform Driver
   #
-  ArmPlatformPkg/ArmVExpressPkg/ArmVExpressDxe/ArmFvpDxe.inf {
-    <LibraryClasses>
-      BdsLib|ArmPkg/Library/BdsLib/BdsLib.inf
-  }
+  ArmPlatformPkg/ArmVExpressPkg/ArmVExpressDxe/ArmFvpDxe.inf
   OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
 
   #
