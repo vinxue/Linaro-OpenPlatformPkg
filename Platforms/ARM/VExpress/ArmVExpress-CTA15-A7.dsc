@@ -55,6 +55,8 @@
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
+  DtPlatformDtbLoaderLib|EmbeddedPkg/Library/DxeDtPlatformDtbLoaderLibDefault/DxeDtPlatformDtbLoaderLibDefault.inf
+
 [BuildOptions]
 !ifdef ARM_BIGLITTLE_TC2
   *_*_ARM_ARCHCC_FLAGS  = -DARM_BIGLITTLE_TC2=1
@@ -173,11 +175,6 @@
   gEmbeddedTokenSpaceGuid.PcdLan9118DefaultNegotiationTimeout|400000
 
   #
-  # Define the device path to the FDT for the platform
-  #
-  gEmbeddedTokenSpaceGuid.PcdFdtDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59)/ca15a7"
-
-  #
   # ARM Architectural Timer Frequency
   #
 !ifdef ARM_BIGLITTLE_TC2
@@ -269,7 +266,15 @@
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 
-  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf {
+    <LibraryClasses>
+      NULL|EmbeddedPkg/Library/PlatformHasAcpiLib/PlatformHasAcpiLib.inf
+  }
+
+  #
+  # FDT installation
+  #
+  EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 
   #
   # Bds

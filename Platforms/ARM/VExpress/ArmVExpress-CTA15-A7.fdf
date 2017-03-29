@@ -181,14 +181,11 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   #
   # FDT installation
   #
-  # The UEFI driver is at the end of the list of the driver to be dispatched
-  # after the device drivers (eg: Ethernet) to ensure we have support for them.
-  INF EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
+  INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 
-  # Example to add a Device Tree to the Firmware Volume
-  #FILE FREEFORM = PCD(gArmVExpressTokenSpaceGuid.PcdFdtVExpressHwA15x2A7x3) {
-  #  SECTION RAW = ArmPlatformPkg/ArmVExpressPkg/Fdts/vexpress-v2p-ca15_a7.dtb
-  #}
+  FILE FREEFORM = 25462CDA-221F-47DF-AC1D-259CFAA4E326 {
+    SECTION RAW = OpenPlatformPkg/Platforms/ARM/VExpress/DeviceTree/vexpress-v2p-ca15_a7.dtb
+  }
 
 [FV.FVMAIN_COMPACT]
 FvBaseAddress      = 0xB0000000
