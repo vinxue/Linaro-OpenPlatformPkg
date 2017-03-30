@@ -220,9 +220,14 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   #
   # FDT installation
   #
-  # The UEFI driver is at the end of the list of the driver to be dispatched
-  # after the device drivers (eg: Ethernet) to ensure we have support for them.
-  INF EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
+  INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
+
+  # builtin device tree binaries -- for rev 0/1/2, respectively.
+  FILE FREEFORM = 25462CDA-221F-47DF-AC1D-259CFAA4E326 {
+    SECTION RAW = OpenPlatformPkg/Platforms/ARM/Juno/DeviceTree/juno.dtb
+    SECTION RAW = OpenPlatformPkg/Platforms/ARM/Juno/DeviceTree/juno-r1.dtb
+    SECTION RAW = OpenPlatformPkg/Platforms/ARM/Juno/DeviceTree/juno-r2.dtb
+  }
 
 !if $(ARCH) == AARCH64
   #

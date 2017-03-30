@@ -50,6 +50,8 @@
   # USB Requirements
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
 
+  DtPlatformDtbLoaderLib|OpenPlatformPkg/Platforms/ARM/Juno/Library/JunoDtPlatformDtbLoaderLib/JunoDtPlatformDtbLoaderLib.inf
+
 [LibraryClasses.common.SEC]
   PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
   ExtractGuidedSectionLib|EmbeddedPkg/Library/PrePiExtractGuidedSectionLib/PrePiExtractGuidedSectionLib.inf
@@ -196,14 +198,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|1080
 
 [PcdsDynamicDefault.common]
-  #
-  # The size of a dynamic PCD of the (VOID*) type can not be increased at run
-  # time from its size at build time. Set the "PcdFdtDevicePaths" PCD to a 128
-  # character "empty" string, to allow to be able to set FDT text device paths
-  # up to 128 characters long.
-  #
-  gEmbeddedTokenSpaceGuid.PcdFdtDevicePaths|L"                                                                                                                                "
-
   # Not all Juno platforms support PCI. This dynamic PCD disables or enable
   # PCI support.
   gEfiMdeModulePkgTokenSpaceGuid.PcdPciDisableBusEnumeration|TRUE
@@ -343,10 +337,7 @@
   #
   # FDT installation
   #
-  EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf {
-    <LibraryClasses>
-      BdsLib|ArmPkg/Library/BdsLib/BdsLib.inf
-  }
+  EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 
 [Components.AARCH64]
   #
