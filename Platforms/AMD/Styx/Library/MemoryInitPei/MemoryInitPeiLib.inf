@@ -80,8 +80,9 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
   gAmdStyxTokenSpaceGuid.PcdFlashNvStorageOriginalBase
 
-[Pcd]
   gArmTokenSpaceGuid.PcdSystemMemoryBase
+
+[Pcd]
   gArmTokenSpaceGuid.PcdSystemMemorySize
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64

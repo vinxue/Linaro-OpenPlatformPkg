@@ -33,23 +33,82 @@ BuildMemoryTypeInformationHob (
   VOID
   );
 
+STATIC ARM_MEMORY_REGION_DESCRIPTOR  mMemoryTable[] = {
+  {
+    // Mapped I/O space
+    0xE0000000UL,
+    0xE0000000UL,
+    SIZE_256MB,
+    ARM_MEMORY_REGION_ATTRIBUTE_DEVICE
+  }, {
+    // PCI config space
+    0xF0000000UL,
+    0xF0000000UL,
+    SIZE_256MB,
+    ARM_MEMORY_REGION_ATTRIBUTE_DEVICE
+  }, {
+    // DRAM
+    FixedPcdGet64 (PcdSystemMemoryBase),
+    FixedPcdGet64 (PcdSystemMemoryBase),
+    0,
+    ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK
+  }, {
+  }
+};
+
+#if !defined(MDEPKG_NDEBUG)
+
+static const char *tblAttrDesc[] =
+{
+  "UNCACHED_UNBUFFERED          ",
+  "NONSECURE_UNCACHED_UNBUFFERED",
+  "WRITE_BACK                   ",
+  "NONSECURE_WRITE_BACK         ",
+  "WRITE_THROUGH                ",
+  "NONSECURE_WRITE_THROUGH      ",
+  "DEVICE                       ",
+  "NONSECURE_DEVICE             "
+};
+#endif
+
+#define LOG_MEM(Index, Desc) \
+  DEBUG ((DEBUG_INIT,                                                   \
+    Desc,                                                               \
+    mMemoryTable[Index].PhysicalBase,                                   \
+    mMemoryTable[Index].PhysicalBase + mMemoryTable[Index].Length - 1,  \
+    mMemoryTable[Index].Length,                                         \
+    tblAttrDesc[mMemoryTable[Index].Attributes]                         \
+    ));
+
 VOID
 InitMmu (
   VOID
   )
 {
-  ARM_MEMORY_REGION_DESCRIPTOR  *MemoryTable;
   VOID                          *TranslationTableBase;
   UINTN                         TranslationTableSize;
   RETURN_STATUS                 Status;
 
-  // Get Virtual Memory Map from the Platform Library
-  ArmPlatformGetVirtualMemoryMap (&MemoryTable);
+  mMemoryTable[2].Length = PcdGet64 (PcdSystemMemorySize);
+
+  DEBUG ((DEBUG_INIT,
+    "Memory Map\n"
+    "------------------------------------------------------------------------\n"
+    "Description                    :        START       -        END         [        SIZE        ]    {              ATTR             }\n"
+    ));
+
+  LOG_MEM (0,
+    "I/O Space [Platform MMIO]      : 0x%016lx - 0x%016lx [ 0x%016lx ]    { %a }\n");
+  LOG_MEM (1,
+    "I/O Space [PCI config space]   : 0x%016lx - 0x%016lx [ 0x%016lx ]    { %a }\n");
+  LOG_MEM (2,
+    "DRAM                           : 0x%016lx - 0x%016lx [ 0x%016lx ]    { %a }\n");
 
   // Note: Because we called PeiServicesInstallPeiMemory() before to call
   //       InitMmu() the MMU Page Table resides in DRAM (even at the top
   //       of DRAM as it is the first permanent memory allocation)
-  Status = ArmConfigureMmu (MemoryTable, &TranslationTableBase, &TranslationTableSize);
+  Status = ArmConfigureMmu (mMemoryTable, &TranslationTableBase,
+             &TranslationTableSize);
   if (EFI_ERROR (Status)) {
     DEBUG ((EFI_D_ERROR, "Error: Failed to enable MMU\n"));
   }
