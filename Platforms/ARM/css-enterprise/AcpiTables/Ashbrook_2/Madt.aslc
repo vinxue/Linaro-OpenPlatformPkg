@@ -1,0 +1,220 @@
+/** @file
+*  Multiple APIC Description Table (MADT)
+*
+*  Copyright (c) 2012 - 2016, ARM Limited. All rights reserved.
+*
+*  This program and the accompanying materials
+*  are licensed and made available under the terms and conditions of the BSD License
+*  which accompanies this distribution.  The full text of the license may be found at
+*  http://opensource.org/licenses/bsd-license.php
+*
+*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+*
+**/
+
+#include "ArmPlatform.h"
+#include <Library/AcpiLib.h>
+#include <Library/ArmLib.h>
+#include <Library/PcdLib.h>
+#include <IndustryStandard/Acpi.h>
+
+//
+// Multiple APIC Description Table
+//
+  #pragma pack (1)
+
+  typedef struct {
+    EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER   Header;
+    EFI_ACPI_6_0_GIC_STRUCTURE                            GicInterfaces[FixedPcdGet32 (PcdClusterCount) * FixedPcdGet32 (PcdCoreCount)];
+    EFI_ACPI_6_0_GIC_DISTRIBUTOR_STRUCTURE                GicDistributor;
+    EFI_ACPI_6_0_GICR_STRUCTURE                           GicRedistributor;
+  } EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE;
+
+  #pragma pack ()
+
+  EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = { 
+    {   
+      ARM_ACPI_HEADER (
+        EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_SIGNATURE,
+        EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE,
+        EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_REVISION
+      ),  
+      //  
+      // MADT specific fields
+      //  
+      0, // LocalApicAddress
+      0, // Flags
+    },  
+    {   
+      // Format: EFI_ACPI_6_0_GICC_STRUCTURE_INIT(GicId, AcpiCpuUid, Mpidr, Flags, PmuIrq, GicBase, GicVBase,
+      //                                          GicHBase, GsivId, GicRBase)
+      // Note: The GIC Structure of the primary CPU must be the first entry (see note in 5.2.12.14 GICC Structure of
+      //       ACPI v6.0).
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-0
+          0, 0, GET_MPID(0, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-1
+          0, 1, GET_MPID(0, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-2
+          0, 2, GET_MPID(0, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-3
+          0, 3, GET_MPID(0, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-4
+          0, 4, GET_MPID(1, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-5
+          0, 5, GET_MPID(1, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-6
+          0, 6, GET_MPID(1, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-7
+          0, 7, GET_MPID(1, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-8
+          0, 8, GET_MPID(2, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-9
+          0, 9, GET_MPID(2, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-10
+          0, 10, GET_MPID(2, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-11
+          0, 11, GET_MPID(2, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-12
+          0, 12, GET_MPID(3, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-13
+          0, 13, GET_MPID(3, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-14
+          0, 14, GET_MPID(3, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-15
+          0, 15, GET_MPID(3, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-16
+          0, 16, GET_MPID(4, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-17
+          0, 17, GET_MPID(4, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-18
+          0, 18, GET_MPID(4, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-19
+          0, 19, GET_MPID(4, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-20
+          0, 20, GET_MPID(5, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-21
+          0, 21, GET_MPID(5, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-22
+          0, 22, GET_MPID(5, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-23
+          0, 23, GET_MPID(5, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-24
+          0, 24, GET_MPID(6, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-25
+          0, 25, GET_MPID(6, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-26
+          0, 26, GET_MPID(6, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-27
+          0, 27, GET_MPID(6, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-28
+          0, 28, GET_MPID(7, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-29
+          0, 29, GET_MPID(7, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-30
+          0, 30, GET_MPID(7, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-31
+          0, 31, GET_MPID(7, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-32
+          0, 32, GET_MPID(8, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-33
+          0, 33, GET_MPID(8, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-34
+          0, 34, GET_MPID(8, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-35
+          0, 35, GET_MPID(8, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-36
+          0, 36, GET_MPID(9, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-37
+          0, 37, GET_MPID(9, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-38
+          0, 38, GET_MPID(9, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-39
+          0, 39, GET_MPID(9, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-40
+          0, 40, GET_MPID(10, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-41
+          0, 41, GET_MPID(10, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-42
+          0, 42, GET_MPID(10, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-43
+          0, 43, GET_MPID(10, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-44
+          0, 44, GET_MPID(11, 0), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-45
+          0, 45, GET_MPID(11, 1), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-46
+          0, 46, GET_MPID(11, 2), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+      EFI_ACPI_6_0_GICC_STRUCTURE_INIT( // A72-47
+          0, 47, GET_MPID(11, 3), EFI_ACPI_6_0_GIC_ENABLED, 23, FixedPcdGet32 (PcdGicDistributorBase),
+          0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Processor Power Efficiency Class */),
+    },
+    // GIC Distributor Entry
+    EFI_ACPI_6_0_GIC_DISTRIBUTOR_INIT(0, FixedPcdGet32 (PcdGicDistributorBase), 0, 3),
+    // GIC Redistributor
+    EFI_ACPI_6_0_GIC_REDISTRIBUTOR_INIT(FixedPcdGet32 (PcdGicRedistributorsBase), 0x600000)
+  };
+
+//
+// Reference the table being generated to prevent the optimizer from removing the
+// data structure from the executable
+//
+VOID* CONST ReferenceAcpiTable = &Madt;
