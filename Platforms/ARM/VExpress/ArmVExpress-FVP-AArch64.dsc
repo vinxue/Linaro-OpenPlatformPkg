@@ -288,6 +288,7 @@
 !if $(ARM_STANDALONE_MM_ENABLE) == TRUE
   # Standalone MM Support
   ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+  MdeModulePkg/Application/UefiInfoApp/UefiInfo.inf
 !endif
 
   #

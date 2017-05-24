@@ -145,6 +145,7 @@ FvNameGuid         = 87940482-fc81-41c3-87e6-399cf85ac8a0
 !if $(ARM_STANDALONE_MM_ENABLE) == TRUE
   # Standalone MM Support
   INF ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+  INF MdeModulePkg/Application/UefiInfoApp/UefiInfo.inf
 !endif
 
   #
