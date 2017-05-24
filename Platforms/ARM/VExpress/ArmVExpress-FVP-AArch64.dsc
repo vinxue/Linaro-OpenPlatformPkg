@@ -119,6 +119,11 @@
   ## Trustzone enable (to make the transition from EL3 to NS EL2 in ArmPlatformPkg/Sec)
   gArmTokenSpaceGuid.PcdTrustzoneSupport|TRUE
 
+!if $(ARM_STANDALONE_MM_ENABLE) == TRUE
+  gArmTokenSpaceGuid.PcdMmBufferBase|0xFF600000
+  gArmTokenSpaceGuid.PcdMmBufferSize|0x10000
+!endif
+
   #
   # ARM PrimeCell
   #
