@@ -41,6 +41,9 @@
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
+!if $(ARM_STANDALONE_MM_ENABLE) == TRUE
+  ArmSvcLib|ArmPkg/Library/ArmSvcLib/ArmSvcLib.inf
+!endif
   ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
 
@@ -281,6 +284,11 @@
   # SMBIOS Support
 
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+
+!if $(ARM_STANDALONE_MM_ENABLE) == TRUE
+  # Standalone MM Support
+  ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+!endif
 
   #
   # Semi-hosting filesystem
