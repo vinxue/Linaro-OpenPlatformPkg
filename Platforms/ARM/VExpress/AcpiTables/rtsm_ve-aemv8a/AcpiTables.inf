@@ -29,6 +29,8 @@
   gtdt.asl
   dbg2.asl
   spcr.asl
+  sdei.asl
+  hest.asl
 
 [Packages]
   MdePkg/MdePkg.dec
