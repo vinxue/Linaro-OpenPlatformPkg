@@ -334,3 +334,5 @@
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   IntelFrameworkModulePkg/Universal/BdsDxe/BdsDxe.inf
 !endif
+
+  MdeModulePkg/Application/MangleHEST/MangleHEST.inf
