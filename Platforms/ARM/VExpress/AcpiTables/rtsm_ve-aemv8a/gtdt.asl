@@ -86,7 +86,7 @@
 [0008]	     CntReadBase Physical address : 0000000000000000
 
 [0004]               Platform Timer Count : 00000001
-[0004]              Platform Timer Offset : 0000005C
+[0004]              Platform Timer Offset : 00000060
 
 /* Memory-mapped GT (Generic Timer) structures */
 [0001]                      Subtable Type : 00

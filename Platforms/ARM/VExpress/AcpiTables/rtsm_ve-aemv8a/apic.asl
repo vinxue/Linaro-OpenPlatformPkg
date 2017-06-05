@@ -58,7 +58,7 @@
        Performance Interrupt Trigger Mode : 0
        Virtual GIC Interrupt Trigger Mode : 0
 [0004]           Parking Protocol Version : 00000000
-[0004]              Performance Interrupt : 00000000
+[0004]              Performance Interrupt : 00000060
 [0008]                     Parked Address : 0000000000000000
 [0008]                       Base Address : 000000002C000000  /* armv8 FVP Base GIC address */
 [0008]           Virtual GIC Base Address : 000000002C02F000
@@ -79,7 +79,7 @@
        Performance Interrupt Trigger Mode : 0
        Virtual GIC Interrupt Trigger Mode : 0
 [0004]           Parking Protocol Version : 00000000
-[0004]              Performance Interrupt : 00000000
+[0004]              Performance Interrupt : 00000061
 [0008]                     Parked Address : 0000000000000000
 [0008]                       Base Address : 000000002C000000
 [0008]           Virtual GIC Base Address : 000000002C02F000
@@ -100,7 +100,7 @@
        Performance Interrupt Trigger Mode : 0
        Virtual GIC Interrupt Trigger Mode : 0
 [0004]           Parking Protocol Version : 00000000
-[0004]              Performance Interrupt : 00000000
+[0004]              Performance Interrupt : 00000062
 [0008]                     Parked Address : 0000000000000000
 [0008]                       Base Address : 000000002C000000
 [0008]           Virtual GIC Base Address : 000000002C02F000
@@ -121,7 +121,7 @@
        Performance Interrupt Trigger Mode : 0
        Virtual GIC Interrupt Trigger Mode : 0
 [0004]           Parking Protocol Version : 00000000
-[0004]              Performance Interrupt : 00000000
+[0004]              Performance Interrupt : 00000063
 [0008]                     Parked Address : 0000000000000000
 [0008]                       Base Address : 000000002C000000
 [0008]           Virtual GIC Base Address : 000000002C02F000
